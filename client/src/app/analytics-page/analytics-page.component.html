@@ -1,0 +1,42 @@
+<!--<div-->
+  <!--class="container-fluid"-->
+  <!--*ngIf="isLoading; else loader"-->
+<!--&gt;-->
+  <div class="row">
+    <!-- Stats -->
+    <div class="outer-w3-agile col-xl">
+      <div class="work-progres">
+        <h4 class="tittle-w3-agileits mb-4">Recent Followers</h4>
+          <div class="col-md-4">
+              <button class="btn btn-primary waves-light" mdbWavesEffect (click)="updateDatasetsAndLabels()">Update datasets and labels</button>
+          </div>
+        <!--<canvas #tpie></canvas>-->
+        <div style="display: block">
+          <canvas mdbChart
+            [chartType]="chartType"
+            [datasets]="chartDatasets"
+            [labels]="chartLabels"
+            [colors]="chartColors"
+            [options]="chartOptions"
+            [legend]="true"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)">
+          </canvas>
+        </div>
+      </div>
+    </div>
+    <!--// Stats -->
+
+    <!-- Pie-chart -->
+    <div class="outer-w3-agile col-xl ml-xl-3 mt-xl-0 mt-3">
+      <div class="work-progres">
+        <h4 class="tittle-w3-agileits mb-4">Recent Followers</h4>
+      </div>
+    </div>
+    <!--// Pie-chart -->
+  </div>
+<!--</div>-->
+
+<!--<ng-template #loader>-->
+  <!--<div class="se-pre-con"></div>-->
+<!--</ng-template>-->

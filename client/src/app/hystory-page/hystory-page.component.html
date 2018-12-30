@@ -1,0 +1,20 @@
+<!-- main-heading -->
+<h2 class="main-title-w3layouts mb-2 text-center">Hystory</h2>
+<!--// main-heading -->
+<div
+    class="container-fluid"
+    *ngIf="isLoading; else loader"
+>
+<!-- Filter -->
+<app-history-filter (onFilter)="applyFilter($event)"></app-history-filter>
+<!---// Filter -->
+
+<!-- Tables content -->
+<app-history-list [incomes]="incomes"></app-history-list>
+<!--// Tables content -->
+
+</div>
+
+<ng-template #loader>
+    <div class="se-pre-con"></div>
+</ng-template>

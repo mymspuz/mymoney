@@ -1,0 +1,139 @@
+﻿npm run dev
+
+nodemon         - упрощает разработку, перезапускает сервер при сохранении изменений
+body-parser     - помогает парсить приходящие параметры в POST-запросах в ввиде json.
+cors            - принимать запросы с другого домена
+morgan          - логировать происходящее на сервере
+jsonwebtoken    - для работы с токенами
+bcryptjs        - шифрование паролей
+passport        - способ аутентификации в системе
+passport-jwt    - стратегия аутентификации в системе
+moment          - для работы с датой и временем
+multer          - для загрузки файлов
+concurrently    - для запуска нескольких скриптов, используем для запуска и сервера и клиента одновременно
+
+organization
+--id
+--name
+--user
+--image
+====================
+/api/organization (GET)
+/api/organization/:id (GET)
+/api/organization/:id (DELETE)
+/api/organization (POST)
+/api/organization/:id (PATCH)
+====================
+
+currency
+--id
+--name
+--user
+====================
+/api/currency (GET)
+/api/currency/:id (GET)
+/api/currency/:id (DELETE)
+/api/currency (POST)
+/api/currency/:id (PATCH)
+====================
+
+currency_date
+--date
+--currency_id
+--value
+====================
+/api/currency/:id (GET)
+/api/currency (POST)
+====================
+
+income
+--id
+--organization_id
+--currency_id
+--date
+--value
+--cach
+--comments
+--user
+====================
+/api/income (GET)
+/api/income/:organizationid (GET)
+/api/income/:id (DELETE)
+/api/income (POST)
+/api/income/:id (PATCH)
+====================
+
+users
+--id
+--fname
+--lname
+--logname
+--email
+--gender
+--password
+====================
+/api/login (POST)
+/api/register (POST)
+====================
+
+analytics_money
+====================
+/api/analitics_money/overview (GET)
+/api/analitics_money/analytics (GET)
+====================
+
+// Сумма за все время по всем организациям.
+SELECT o.`name`,
+	   SUM(i.`value`) AS rub,
+	   SUM(i.`value` / (SELECT u.`value` FROM `currency_date` AS u WHERE u.`date` = i.`date` AND u.`currency_sec` = 1)) AS usd,
+       SUM(i.`value` / (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = i.`date` AND e.`currency_sec` = 2)) AS eur
+FROM `incomes` AS i
+LEFT JOIN `organizations` AS o ON i.`organization_id` = o.`id`
+GROUP BY o.`name`
+ORDER BY rub DESC
+/////////////////////////////////////////////////////////
+
+SELECT o.`name`,
+	   i.`date`,
+	   SUM(i.`value`) AS rub,
+	   SUM(i.`value` / (SELECT u.`value` FROM `currency_date` AS u WHERE u.`date` = i.`date` AND u.`currency_sec` = 1)) AS usd,
+       SUM(i.`value` / (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = i.`date` AND e.`currency_sec` = 2)) AS eur
+FROM `incomes` AS i
+LEFT JOIN `organizations` AS o ON i.`organization_id` = o.`id`
+WHERE YEAR(i.`date`) = '2018' AND MONTH(i.`date`) = '8' AND o.`id` = 2
+GROUP BY o.`name`, date_format(i.`date`, "%Y-%m")
+ORDER BY rub DESC
+////////////////////////////////////////////////////////////
+
+SELECT o.`name`,
+	   MONTHNAME(i.`date`),
+	   SUM(i.`value`) AS rub,
+	   SUM(i.`value` / (SELECT u.`value` FROM `currency_date` AS u WHERE u.`date` = i.`date` AND u.`currency_sec` = 1)) AS usd,
+       SUM(i.`value` / (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = i.`date` AND e.`currency_sec` = 2)) AS eur
+FROM `incomes` AS i
+LEFT JOIN `organizations` AS o ON i.`organization_id` = o.`id`
+GROUP BY o.`name`, date_format(i.`date`, "%Y-%m")
+ORDER BY o.`name`
+
+///////////////////////////////////////////////////////////
+
+SELECT o.`id`,
+	   o.`name`,
+	   MONTHNAME(i.`date`) AS month,
+	   SUM(i.`value`) AS rub,
+	   SUM(i.`value` / (SELECT u.`value` FROM `currency_date` AS u WHERE u.`date` = i.`date` AND u.`currency_sec` = 1)) AS usd,
+       SUM(i.`value` / (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = i.`date` AND e.`currency_sec` = 2)) AS eur
+FROM `incomes` AS i
+LEFT JOIN `organizations` AS o ON i.`organization_id` = o.`id`
+WHERE i.`date` >= DATE_SUB(CURDATE(), Interval 6 MONTH)
+GROUP BY o.`name`, date_format(i.`date`, "%Y-%m")
+ORDER BY i.`date` DESC
+
+///////////////////////////////////////////////////////////
+
+SELECT YEAR(i.date),
+	   SUM(i.`value`) AS rub,
+	   SUM(i.`value` / (SELECT u.`value` FROM `currency_date` AS u WHERE u.`date` = i.`date` AND u.`currency_sec` = 1)) AS usd,
+       SUM(i.`value` / (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = i.`date` AND e.`currency_sec` = 2)) AS eur
+FROM `incomes` AS i
+GROUP BY date_format(i.`date`, "%Y")

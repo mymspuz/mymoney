@@ -1,0 +1,117 @@
+<div
+  class="container-fluid"
+  *ngIf="organizationSumm$ | async as organizations; else loader"
+>
+  <div class="row">
+    <!-- Stats -->
+    <div class="outer-w3-agile col-xl">
+      <div class="work-progres">
+        <h4 class="tittle-w3-agileits mb-4">Recent Followers</h4>
+        <div class="widget-header row justify-content-between mb-3">
+          <div class="col">
+            <h3>Total</h3>
+          </div>
+          <div class="col">
+            <h3 class="text-right">{{lastMonthSum}}</h3>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>Organization</th>
+              <th *ngFor="let month of arrayMonth">
+                {{month}}
+              </th>
+            </tr>
+            <tr *ngFor="let norg of arrayOrganization; let o = index">
+              <td>
+                <a
+                  [routerLink]="['/organization', arrayResArray[o][0]]"
+                >
+                  {{norg}}
+                </a>
+              </td>
+              <td *ngFor="let month of arrayMonth; let m = index">
+                {{arrayResArray[o][m + 2]}}
+              </td>
+            </tr>
+            <tr>
+                <td><h3>Summa:</h3></td>
+                <td *ngFor="let monthsum of arrayMonthSum; let s = index">
+                    <h4>
+                        <span class="badge badge-pill badge-dark" *ngIf="arrayDist[s] === 0">
+                            {{arrayMonthSum[s]}}
+                        </span>
+                        <span class="badge badge-pill badge-success" *ngIf="arrayDist[s] === 1">
+                            {{arrayMonthSum[s]}}
+                        </span>
+                        <span class="badge badge-pill badge-danger" *ngIf="arrayDist[s] === 2">
+                            {{arrayMonthSum[s]}}
+                        </span>
+                        <span class="badge badge-pill badge-warning" *ngIf="arrayDist[s] === 3">
+                            {{arrayMonthSum[s]}}
+                        </span>
+                    </h4>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!--// Stats -->
+    <!-- Pie-chart -->
+    <div class="outer-w3-agile col-xl ml-xl-3 mt-xl-0 mt-3">
+      <div class="work-progres">
+        <h4 class="tittle-w3-agileits mb-4">Recent Followers</h4>
+        <div class="widget-header row justify-content-between mb-3">
+          <div class="col">
+            <h3>Total</h3>
+          </div>
+          <div class="col">
+            <h3 class="text-right">{{allOrganizationSumm}}</h3>
+          </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="organizations.length !== 0; else empty">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Organization</th>
+              <th>Summa</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let organization of organizations; let o = index">
+              <td>{{o + 1}}</td>
+              <td>
+                <a
+                  [routerLink]="['/organization', organization.id]"
+                >
+                  {{organization.name}}
+                </a>
+              </td>
+              <td>{{organization.summa}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #empty>
+          <div class="alert alert-danger text-center" role="alert">
+            <strong>No organizations</strong>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <!--// Pie-chart -->
+  </div>
+</div>
+
+<ng-template #loader>
+  <div class="se-pre-con"></div>
+</ng-template>

@@ -1,0 +1,125 @@
+<!-- main-heading -->
+<h2 class="main-title-w3layouts mb-2 text-center">Organizations</h2>
+<!--// main-heading -->
+<div
+  class="container-fluid"
+  *ngIf="organizations$ | async as organizations; else loader"
+>
+  <div class="row">
+    <!-- Stats -->
+    <div class="outer-w3-agile col-xl">
+      <div class="work-progres">
+        <h4 class="tittle-w3-agileits mb-4">Recent Followers</h4>
+        <hr>
+        <div class="d-flex justify-content-around mb-5">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            routerLink="/organization/new"
+          >
+            Add organization
+          </button>
+        </div>
+        <div class="table-responsive" *ngIf="organizations.length !== 0; else empty">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Project</th>
+              <th>Manager</th>
+              <th>Status</th>
+              <th>Progress</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let organization of organizations; let o = index">
+              <td>{{o + 1}}</td>
+              <td>
+                <a
+                  [routerLink]="['/organization', organization.id]"
+                >
+                  {{organization.name}}
+                </a>
+              </td>
+              <td>Alexander</td>
+              <td>
+                <span class="badge badge-danger">in progress</span>
+              </td>
+              <td>
+                <span class="badge badge-pill badge-primary">70%</span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #empty>
+          <div class="alert alert-danger text-center" role="alert">
+            <strong>No organizations</strong>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <!--// Stats -->
+    <!-- Pie-chart -->
+    <div class="outer-w3-agile col-xl ml-xl-3 mt-xl-0 mt-3 report">
+      <h4 class="tittle-w3-agileits mb-4">Rerport</h4>
+      <div class="widget widget-report-w3-table">
+        <div class="widget-header row justify-content-between mb-3">
+          <div class="col">
+            <h3>August 2018</h3>
+          </div>
+          <div class="col">
+            <h3 class="text-right">$29,228</h3>
+          </div>
+        </div>
+
+        <div class="widget-body p-15">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>2356</td>
+              <td>dummy text </td>
+              <td>6,200.00</td>
+            </tr>
+            <tr>
+              <td>4589</td>
+              <td>Lorem Ipsum</td>
+              <td>6,500.00</td>
+            </tr>
+
+            <tr>
+              <td>3269</td>
+              <td>specimen book</td>
+              <td>6,800.00</td>
+            </tr>
+            <tr>
+              <td>5126</td>
+              <td>Letraset sheets</td>
+              <td>7,200.00</td>
+            </tr>
+            <tr>
+              <td>7425</td>
+              <td>PageMaker</td>
+              <td>5,900.00</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!--// Pie-chart -->
+  </div>
+</div>
+
+<ng-template #loader>
+  <div class="se-pre-con"></div>
+</ng-template>
