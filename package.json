@@ -9,7 +9,7 @@
     "client-install": "npm install --prefix client",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "ng build",
+    "build": "cd ./client && npm i && ng build --prod && cd ..",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
