@@ -21,6 +21,9 @@ import { IncomeFormComponent } from './organizations-page/organization-form/inco
 import { HistoryListComponent } from './hystory-page/history-list/history-list.component';
 import { HistoryFilterComponent } from './hystory-page/history-filter/history-filter.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { PieAllComponent } from './analytics-page/pie-all/pie-all.component';
+import { BarYearComponent } from './analytics-page/bar-year/bar-year.component';
+import { LineCurrComponent } from './analytics-page/line-curr/line-curr.component';
 
 @NgModule({
     declarations: [
@@ -36,7 +39,10 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
         OrganizationFormComponent,
         IncomeFormComponent,
         HistoryListComponent,
-        HistoryFilterComponent
+        HistoryFilterComponent,
+        PieAllComponent,
+        BarYearComponent,
+        LineCurrComponent
     ],
     imports: [
         BrowserModule,

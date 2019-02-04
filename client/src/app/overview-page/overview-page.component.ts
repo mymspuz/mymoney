@@ -29,7 +29,6 @@ export class OverviewPageComponent implements OnInit {
   ngOnInit() {
 
     this.organizationSumm$ = this.organizationService.getAllOrganizationSumm()
-      console.log(this.organizationSumm$)
     this.getTotalOrganizationSumm()
 
     this.organizationLastMonthSumm$ = this.organizationService.getLastNumberMonth()

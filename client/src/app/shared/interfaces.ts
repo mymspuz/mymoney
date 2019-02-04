@@ -1,3 +1,6 @@
+import * as moment from 'moment';
+import _date = moment.unitOfTime._date;
+
 export interface User {
     email: string;
     password: string;
@@ -45,8 +48,29 @@ export interface OrganizationMonthSumm {
     eur: number
 }
 
+export interface OrganizationYearSumm {
+    year: number
+    rub: number
+    usd: number
+    eur: number
+}
 export interface Filter {
     organization_id?: number
     sdate?: Date
     edate?: Date
+}
+
+export interface MyChar  {
+    myChartType?: string
+    myDatasets?: Array<any>
+    labels?: Array<string>
+    colors?: Array<any>
+    options?: any
+    legend?: boolean
+}
+
+export interface CoursCurrency {
+    date: _date
+    usd: number
+    eur: number
 }

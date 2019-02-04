@@ -1,17 +1,22 @@
-import {AfterViewInit, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {OrganizationsService} from '../shared/services/organizations.service';
-import {Observable} from 'rxjs';
-import {OrganizationSumm} from '../shared/interfaces';
-import {ChartsModule} from 'angular-bootstrap-md';
+import {CoursCurrency, MyChar, OrganizationSumm, OrganizationYearSumm} from '../shared/interfaces';
+import {AnalyticsService} from '../shared/services/analytics.service';
 
 @Component({
   selector: 'app-analytics-page',
   templateUrl: './analytics-page.component.html',
   styleUrls: ['./analytics-page.component.css']
 })
-export class AnalyticsPageComponent implements OnInit, AfterViewInit {
+export class AnalyticsPageComponent implements OnInit {
 
   organization: OrganizationSumm[] = []
+  yearSumm: OrganizationYearSumm[] = []
+  coursCurr: CoursCurrency[] = []
+
+  barYears: MyChar = {}
+  pieAlls: MyChar = {}
+  lineCurrs: MyChar = {}
 
   abackgroundColor: Array<string> = [
     '#F7464A',
@@ -41,56 +46,108 @@ export class AnalyticsPageComponent implements OnInit, AfterViewInit {
     'rgba(255, 159, 64, 1)'
   ]
 
-  chartType: string = 'pie';
-  chartDatasets: Array<any> = [
-    { data: [] }
-  ];
-  chartLabels: Array<any> = [];
-  chartColors: Array<any> = [
-    {
-      backgroundColor: [],
-      hoverBackgroundColor: [],
-      borderWidth: 2,
-    }
-  ];
-  chartOptions: any = {
-    responsive: true
-  };
-
-  constructor(private organizationService: OrganizationsService) { }
+  constructor(private organizationService: OrganizationsService, private analyticsService: AnalyticsService) {
+  }
 
   ngOnInit(): void {
-      this.organizationService.getAllOrganizationSumm().subscribe(
-          org => {
-              this.organization = org
+
+    let bdataSet: Array<number> = []
+    let bdataLabels: Array<string> = []
+
+    let pdataSet: Array<number> = []
+    let pdataLabels: Array<string> = []
+
+    let ldataSetF: Array<number> = []
+    let ldataSetS: Array<number> = []
+    let ldataLabels: Array<string> = []
+
+    this.organizationService.getAllOrganizationSumm().subscribe(
+        org => {
+            this.organization = org
+            for(let i = 0; i < this.organization.length; i++) {
+              pdataSet.push(this.organization[i].summa)
+              pdataLabels.push(this.organization[i].name)
+            }
+            this.pieAlls.myDatasets  = [ { data: pdataSet } ]
+            this.pieAlls.labels = pdataLabels
+        }
+    )
+
+    this.analyticsService.getAllYear().subscribe(
+        year => {
+          this.yearSumm = year
+          for (let i = 0; i < this.yearSumm.length; i++) {
+            bdataSet.push(this.yearSumm[i].rub)
+            bdataLabels.push(String(this.yearSumm[i].year))
           }
-      )
+          this.barYears.myDatasets =  [{ data: bdataSet, label: 'rub/year' }];
+          this.barYears.labels = bdataLabels;
+        }
+    )
 
+    this.analyticsService.getAllCurr().subscribe(
+        curr => {
+          this.coursCurr = curr
+          for (let i = 0; i < this.coursCurr.length; i++) {
+            ldataSetF.push(this.coursCurr[i].usd)
+            ldataSetS.push(this.coursCurr[i].eur)
+            ldataLabels.push(this.coursCurr[i].date)
+          }
+          this.lineCurrs.myDatasets = [
+            {data: ldataSetF, label: 'USD'},
+            {data: ldataSetS, label: 'EUR'}
+          ]
+          this.lineCurrs.labels = ldataLabels
+        }
+    )
 
-  }
+    this.barYears.myChartType = 'bar'
+    this.pieAlls.myChartType = 'pie'
+    this.lineCurrs.myChartType = 'line'
 
-  ngAfterViewInit(): void {
-      this.updateDatasetsAndLabels()
-  }
-
-    updateDatasetsAndLabels() {
-      let dataSets: Array<number> = []
-      let cLabels: Array<string> = []
-      let tbackgroundColor: Array<string> = []
-      let thoverBackgroundColor: Array<string> = []
-
-      for(let i = 0; i < this.organization.length; i++) {
-          dataSets.push(this.organization[i].summa)
-          cLabels.push(this.organization[i].name)
-          tbackgroundColor.push(this.abackgroundColor[i])
-          thoverBackgroundColor.push(this.ahoverBackgroundColor[i])
+    this.barYears.colors = [
+      {
+        backgroundColor: this.abackgroundColor,
+        borderColor: this.ahoverBackgroundColor,
+        borderWidth: 2,
       }
+    ];
 
-      this.chartDatasets  = [ { data: dataSets } ]
-      this.chartLabels = cLabels
-      this.chartColors = [{backgroundColor: tbackgroundColor, hoverBackgroundColor: thoverBackgroundColor, borderWidth: 2}]
-    }
+    this.pieAlls.colors = [
+      {
+        backgroundColor: this.abackgroundColor,
+        borderColor: this.ahoverBackgroundColor,
+        borderWidth: 2,
+      }
+    ];
 
-  chartClicked(e: any): void { }
-  chartHovered(e: any): void { }
+    this.lineCurrs.colors = [
+      {
+        backgroundColor: 'rgba(105, 0, 132, .2)',
+        borderColor: 'rgba(200, 99, 132, .7)',
+        borderWidth: 2,
+      },
+      {
+        backgroundColor: 'rgba(0, 137, 132, .2)',
+        borderColor: 'rgba(0, 10, 130, .7)',
+        borderWidth: 2,
+      }
+    ];
+
+    this.barYears.options = {
+      responsive: true
+    };
+    this.pieAlls.options = {
+      responsive: true
+    };
+    this.lineCurrs.options = {
+      responsive: true
+    };
+
+    this.barYears.legend = true;
+    this.pieAlls.legend = true;
+    this.lineCurrs.legend = true;
+
+  }
+
 }

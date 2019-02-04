@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {OrganizationsService} from '../shared/services/organizations.service';
-import {Organization, OrganizationMonthSumm, OrganizationSumm} from '../shared/interfaces';
+import {Organization} from '../shared/interfaces';
 import {Observable} from 'rxjs';
 
 @Component({

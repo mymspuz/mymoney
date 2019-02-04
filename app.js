@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use(cors())
 
-app.use('/api/analytics_money', analyticsRoutes)
+app.use('/api/analytics', analyticsRoutes)
 app.use('/api/currency', currencyRoutes)
 app.use('/api/currency_date', currencyDateRoutes)
 app.use('/api/income', incomeRoutes)
