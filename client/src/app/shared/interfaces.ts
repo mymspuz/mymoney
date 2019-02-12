@@ -70,7 +70,7 @@ export interface MyChar  {
 }
 
 export interface CoursCurrency {
-    date: _date
+    date: string
     usd: number
     eur: number
 }

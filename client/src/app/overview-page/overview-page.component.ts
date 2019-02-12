@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {OrganizationsService} from '../shared/services/organizations.service';
 import {Observable} from 'rxjs';
-import {OrganizationMonthSumm, OrganizationSumm} from '../shared/interfaces';
+import {CoursCurrency, OrganizationMonthSumm, OrganizationSumm} from '../shared/interfaces';
+import {OverviewService} from '../shared/services/overview.service';
 import {injectTemplateRef} from '@angular/core/src/render3/view_engine_compatibility';
 
 @Component({
@@ -14,7 +15,6 @@ export class OverviewPageComponent implements OnInit {
   organizationSumm$: Observable<OrganizationSumm[]>
   allOrganizationSumm = 0
   lastMonthSum = 0
-  curr: Observable<any>
 
   organizationLastMonthSumm$: Observable<OrganizationMonthSumm[]>
   arrayMonth: string [] = []
@@ -23,30 +23,68 @@ export class OverviewPageComponent implements OnInit {
   arrayMonthSum: number [] = []
   // 0 - последний, 1 - больше, 2 - меньше, 3 - равно
   arrayDist: number [] = []
+  coursCurrency: CoursCurrency = {
+      date: '',
+      usd: 0,
+      eur: 0
+  }
 
-  constructor(private organizationService: OrganizationsService) { }
+  constructor(private organizationService: OrganizationsService, private overviewService: OverviewService) { }
 
   ngOnInit() {
+
+    const moment = require('moment')
+    this.coursCurrency.date = moment().format('YYYY-MM-DD')
 
     this.organizationSumm$ = this.organizationService.getAllOrganizationSumm()
     this.getTotalOrganizationSumm()
 
     this.organizationLastMonthSumm$ = this.organizationService.getLastNumberMonth()
     this.getMyArray()
+    this.overviewService.getByDate(this.coursCurrency.date).subscribe(
+        item => {
+            for(let i = 0; i < item.length; i++) {
+                if (item[i].currency_sec === 1) {
+                    this.coursCurrency.usd = item[i].value
+                } else {
+                    this.coursCurrency.eur = item[i].value
+                }
+            }
+        },
+        error => {
+            console.log(error.error.message)
+        },
+        () => {
+            this.getOnlineCurrency()
+        }
+    )
+  }
 
-    // this.curr = this.organizationService.getCurrensy()
-    //   this.curr.subscribe(
-    //       item => {
-    //           console.log(item)
-    //       }
-    //   )
-    //   console.log(this.curr)
-    // this.organizationService.getCurrensy().subscribe(
-    //     curr => {
-    //         console.log(curr)
-    //   }
-    // )
+  private getOnlineCurrency() {
+      if (this.coursCurrency.usd === 0) {
+          this.overviewService.getCurrency().subscribe(
+              currency => {
+                  this.coursCurrency.usd = currency.quotes.USDRUB
+                  this.coursCurrency.eur = currency.quotes.USDRUB / currency.quotes.USDEUR
+              },
+              error => {
+                  console.log(error.error.message)
+              },
+              () => {
+                  this.add()
+              }
+          )
+      }
+  }
 
+  private add() {
+      this.overviewService.addCurrency(this.coursCurrency).subscribe(
+          item => {
+          },
+          error => {
+              console.log(error.error.message)
+          }
+      )
   }
 
   private getTotalOrganizationSumm() {

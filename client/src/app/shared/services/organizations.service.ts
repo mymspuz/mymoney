@@ -51,13 +51,4 @@ export class OrganizationsService {
         return this.http.get<OrganizationMonthSumm[]>('/api/organization/month')
     }
 
-    getCurrensy(): Observable<any> {
-        return this.http.get<any>('/api/organization/curr')
-        // const url = 'http://apilayer.net/api/live?access_key=5aeebd574d7933d512d6f97b2e394b22&currencies=EUR,RUB&source=USD&format=1'
-        // return this.http.jsonp<any>(url, '')
-        //     .pipe(
-        //         map((response: Response) => response.json())
-        //     )
-    }
-
 }

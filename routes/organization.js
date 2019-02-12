@@ -9,7 +9,6 @@ const controller = require('../controllers/organization')
 
 router.get('/month', passport.authenticate('jwt', {session: false}), controller.getLastNumberMonth)
 router.get('/summ', passport.authenticate('jwt', {session: false}), controller.getAllSum)
-router.get('/curr', passport.authenticate('jwt', {session: false}), controller.getCurr)
 router.get('/', passport.authenticate('jwt', {session: false}), controller.getAll)
 router.get('/:id', passport.authenticate('jwt', {session: false}), controller.getById)
 router.delete('/:id', passport.authenticate('jwt', {session: false}), controller.delete)

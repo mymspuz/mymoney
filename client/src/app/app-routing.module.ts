@@ -10,7 +10,6 @@ import {AnalyticsPageComponent} from './analytics-page/analytics-page.component'
 import {OrganizationsPageComponent} from './organizations-page/organizations-page.component';
 import {HystoryPageComponent} from './hystory-page/hystory-page.component';
 import {OrganizationFormComponent} from './organizations-page/organization-form/organization-form.component';
-import {IncomeFormComponent} from './organizations-page/organization-form/income-form/income-form.component';
 
 const routes: Routes = [
     {

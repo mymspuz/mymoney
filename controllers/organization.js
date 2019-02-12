@@ -114,16 +114,3 @@ module.exports.getLastNumberMonth = async function (req, res) {
         errorHandler(res, e)
     }
 }
-
-module.exports.getCurr = async function (req, res) {
-    try {
-        const url = 'http://apilayer.net/api/live?access_key=5aeebd574d7933d512d6f97b2e394b22&currencies=EUR,RUB&source=USD&format=1'
-        //res.status(200).json(response)
-        return this.http.jsonp<any>(url, '')
-        // .pipe(
-        //     map((response: Response) => response.json())
-        // )
-    } catch (e) {
-        errorHandler(res, e)
-    }
-}

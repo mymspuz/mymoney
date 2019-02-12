@@ -35,11 +35,6 @@ export class OrganizationFormComponent implements OnInit {
     this.form = new FormGroup({
         name: new FormControl(null, Validators.required)
     })
-      // this.organizationService.getCurrensy().subscribe(
-      //   currency => {
-      //       console.log(currency)
-      //   }
-      // )
 
     this.form.disable()
 

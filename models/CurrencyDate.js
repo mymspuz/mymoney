@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../shared/mysqlconnect')
+const Currency = require('../models/Currency')
 
 const CurrencyDate = sequelize.define('currency_date', {
     date: {
@@ -15,8 +16,7 @@ const CurrencyDate = sequelize.define('currency_date', {
     },
     value: {
         type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-        unique: true
+        allowNull: false
     }
 })
 
