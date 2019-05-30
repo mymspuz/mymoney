@@ -17,7 +17,7 @@ export class HystoryPageComponent implements OnInit, OnDestroy {
   filter: Filter = {}
 
   offset = 0
-  limit = 20
+  limit = 50
 
 
   constructor(private hystoryService: HystoryService) { }

@@ -95,9 +95,13 @@ module.exports.getAllSum = async function (req, res) {
 }
 
 module.exports.getLastNumberMonth = async function (req, res) {
+    const moment = require('moment')
+    const endDate = moment().endOf('month').format('YYYY-MM-DD')
+    const startDate = moment(endDate).subtract(5, 'months').format('YYYY-MM-DD')
     try {
-        sequelize.query('SELECT o.id, o.name, MONTHNAME(i.date) AS month, SUM(i.value) AS rub, SUM(i.value / (SELECT u.value FROM currency_date AS u WHERE u.date = i.date AND u.currency_sec = 1)) AS usd, SUM(i.value / (SELECT e.value FROM currency_date AS e WHERE e.date = i.date AND e.currency_sec = 2)) AS eur FROM incomes AS i LEFT JOIN organizations AS o ON i.organization_id = o.id WHERE i.date >= DATE_SUB(CURDATE(), Interval 6 MONTH) GROUP BY o.id, o.name, date_format(i.date, "%Y-%m") ORDER BY i.date DESC',
+        sequelize.query('SELECT o.id, o.name, MONTHNAME(i.date) AS month, SUM(i.value) AS rub, SUM(i.value / (SELECT u.value FROM currency_date AS u WHERE u.date = i.date AND u.currency_sec = 1)) AS usd, SUM(i.value / (SELECT e.value FROM currency_date AS e WHERE e.date = i.date AND e.currency_sec = 2)) AS eur FROM incomes AS i LEFT JOIN organizations AS o ON i.organization_id = o.id WHERE i.date BETWEEN :datestart AND :dateend GROUP BY o.id, o.name, date_format(i.date, "%Y-%m") ORDER BY i.date DESC',
             {
+                replacements: { datestart: moment(startDate).startOf('month').format('YYYY-MM-DD'), dateend: endDate },
                 raw: true,
                 type: Sequelize.QueryTypes.SELECT
             }
