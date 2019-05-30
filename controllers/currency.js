@@ -16,7 +16,7 @@ module.exports.getAll = async function (req, res) {
 
 module.exports.getById = async function (req, res) {
     try {
-        const currency = await Currency.findById(req.params.id)
+        const currency = await Currency.findByPk(req.params.id)
         res.status(200).json(currency)
     } catch (e) {
         errorHandler(res, e)

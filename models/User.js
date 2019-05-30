@@ -2,10 +2,10 @@ const Sequelize = require('sequelize')
 const sequelize = require('../shared/mysqlconnect')
 
 const User = sequelize.define('users', {
-    // id: {
-    //     type: Sequelize.INTEGER,
-    //     primaryKey: true
-    // },
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+    },
     fname: {
         type: Sequelize.STRING,
         allowNull: false

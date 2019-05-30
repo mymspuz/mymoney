@@ -19,7 +19,7 @@ module.exports.getAll = async function (req, res) {
 
 module.exports.getById = async function (req, res) {
     try {
-        const organization = await Organization.findById(req.params.id)
+        const organization = await Organization.findByPk(req.params.id)
         res.status(200).json(organization)
     } catch (e) {
         errorHandler(res, e)

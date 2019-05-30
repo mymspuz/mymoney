@@ -62,7 +62,7 @@ module.exports.getByOrganizationId = async function (req, res) {
 
 module.exports.getById = async function (req, res) {
     try{
-        const income = await Income.findById(req.params.id)
+        const income = await Income.findByPk(req.params.id)
         res.status(201).json(income)
     } catch (e) {
         errorHandler(res, e)
