@@ -54,6 +54,14 @@ export interface OrganizationYearSumm {
     usd: number
     eur: number
 }
+
+export interface OrganizationMonthSumm {
+    month_year: string
+    rub: number
+    usd: number
+    eur: number
+}
+
 export interface Filter {
     organization_id?: number
     sdate?: Date

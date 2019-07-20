@@ -24,6 +24,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { PieAllComponent } from './analytics-page/pie-all/pie-all.component';
 import { BarYearComponent } from './analytics-page/bar-year/bar-year.component';
 import { LineCurrComponent } from './analytics-page/line-curr/line-curr.component';
+import {BarMonthComponent} from './analytics-page/bar-month/bar-month.component';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { LineCurrComponent } from './analytics-page/line-curr/line-curr.componen
         HistoryFilterComponent,
         PieAllComponent,
         BarYearComponent,
+        BarMonthComponent,
         LineCurrComponent
     ],
     imports: [

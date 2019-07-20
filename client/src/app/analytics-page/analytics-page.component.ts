@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {OrganizationsService} from '../shared/services/organizations.service';
-import {CoursCurrency, MyChar, OrganizationSumm, OrganizationYearSumm} from '../shared/interfaces';
+import {CoursCurrency, MyChar, OrganizationSumm, OrganizationYearSumm, OrganizationMonthSumm} from '../shared/interfaces';
 import {AnalyticsService} from '../shared/services/analytics.service';
 
 @Component({
@@ -13,8 +13,10 @@ export class AnalyticsPageComponent implements OnInit {
   organization: OrganizationSumm[] = []
   yearSumm: OrganizationYearSumm[] = []
   coursCurr: CoursCurrency[] = []
+  monthSumm: OrganizationMonthSumm[] = []
 
   barYears: MyChar = {}
+  barMonths: MyChar = {}
   pieAlls: MyChar = {}
   lineCurrs: MyChar = {}
 
@@ -54,6 +56,9 @@ export class AnalyticsPageComponent implements OnInit {
     let bdataSet: Array<number> = []
     let bdataLabels: Array<string> = []
 
+    let bmdataSet: Array<number> = []
+    let bmdataLabels: Array<string> = []
+
     let pdataSet: Array<number> = []
     let pdataLabels: Array<string> = []
 
@@ -85,6 +90,45 @@ export class AnalyticsPageComponent implements OnInit {
         }
     )
 
+    this.analyticsService.getAllMonth().subscribe(
+      month_year => {
+        this.monthSumm = month_year
+        for (let i = 0; i < this.monthSumm.length; i++) {
+          bmdataSet.push(this.monthSumm[i].rub)
+          bmdataLabels.push(String(this.monthSumm[i].month_year))
+        }
+        console.log(bmdataSet)
+        let myMin = Math.min.apply(null, bmdataSet)
+        let myMax = Math.max.apply(null, bmdataSet)
+        this.barMonths.myDatasets =  [{ data: bmdataSet, label: 'rub/month' }];
+        this.barMonths.labels = bmdataLabels;
+        let backC = []
+        let borderC = []
+        for (let i = 0; i < bmdataSet.length; i++) {
+          if (bmdataSet[i] === myMin) {
+            backC.push('#F7464A')
+            borderC.push('#FF5A5E')
+          } else if (bmdataSet[i] === myMax) {
+            backC.push('rgba(153, 102, 255, 1)')
+            borderC.push('rgba(153, 102, 255, 0.2)')
+          } else if (bmdataSet[i] < 100000) {
+            backC.push('#46BFBD')
+            borderC.push('#5AD3D1')
+          } else {
+            backC.push('#FDB45C')
+            borderC.push('#FFC870')
+          }
+        }
+        this.barMonths.colors = [
+          {
+            backgroundColor: backC,
+            borderColor: borderC,
+            borderWidth: 2,
+          }
+        ];
+      }
+    )
+
     this.analyticsService.getAllCurr().subscribe(
         curr => {
           this.coursCurr = curr
@@ -102,6 +146,7 @@ export class AnalyticsPageComponent implements OnInit {
     )
 
     this.barYears.myChartType = 'bar'
+    this.barMonths.myChartType = 'bar'
     this.pieAlls.myChartType = 'pie'
     this.lineCurrs.myChartType = 'line'
 
@@ -137,6 +182,9 @@ export class AnalyticsPageComponent implements OnInit {
     this.barYears.options = {
       responsive: true
     };
+    this.barMonths.options = {
+      responsive: true
+    };
     this.pieAlls.options = {
       responsive: true
     };
@@ -145,6 +193,7 @@ export class AnalyticsPageComponent implements OnInit {
     };
 
     this.barYears.legend = true;
+    this.barMonths.legend = true;
     this.pieAlls.legend = true;
     this.lineCurrs.legend = true;
 

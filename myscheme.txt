@@ -1,4 +1,7 @@
 ﻿npm run dev
+npm update
+npm audit fix
+
 
 nodemon         - упрощает разработку, перезапускает сервер при сохранении изменений
 body-parser     - помогает парсить приходящие параметры в POST-запросах в ввиде json.
@@ -139,3 +142,13 @@ SELECT YEAR(i.date),
        SUM(i.`value` / (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = i.`date` AND e.`currency_sec` = 2)) AS eur
 FROM `incomes` AS i
 GROUP BY date_format(i.`date`, "%Y")
+
+///////////////////////////////////////////////////////////
+
+SELECT CONCAT(LEFT(MONTHNAME(i.`date`), 3), ", ", year(i.`date`)) AS month_year,
+	   SUM(i.`value`) AS rub,
+	   SUM(i.`value` / (SELECT u.`value` FROM `currency_date` AS u WHERE u.`date` = i.`date` AND u.`currency_sec` = 1)) AS usd,
+       SUM(i.`value` / (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = i.`date` AND e.`currency_sec` = 2)) AS eur
+FROM `incomes` AS i
+GROUP BY date_format(i.`date`, "%Y-%m")
+ORDER BY i.`date` ASC
