@@ -1,0 +1,163 @@
+<div
+  class="container-fluid"
+  *ngIf="!loading; else loader"
+>
+<div class="row">
+  <div class="outer-w3-agile col-xl mt-3">
+    <h4 class="tittle-w3-agileits mb-4">Striped Rows</h4>
+    <hr>
+    <div class="d-flex justify-content-around mb-5">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#incomeModal" (click)="onAddPosition()">
+        Add income
+      </button>
+    </div>
+    <table class="table table-striped" *ngIf="incomes.length !== 0; else empty">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Date</th>
+        <th scope="col">Value</th>
+        <th scope="col">Currency</th>
+        <th scope="col">Cach</th>
+        <th scope="col">Operation</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let income of incomes; let i = index">
+        <td>{{i + 1}}</td>
+        <td>{{income.date | date: 'dd.MM.yyyy'}}</td>
+        <td>{{income.value}}</td>
+        <td>{{income.currency_id}}</td>
+        <td>{{income.cach}}</td>
+        <td>
+            <button
+                type="button"
+                class="btn btn-danger"
+                (click)="onDeleteIncome($event, income)"
+            >
+                <i class="fas fa-trash"></i>
+            </button>
+            |
+            <a href="#incomeModal" class="btn btn-primary" data-toggle="modal" (click)="onSelectIncome(income)"><i class="fas fa-edit"></i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <ng-template #empty>
+      <div class="alert alert-danger text-center" role="alert">
+        <strong>No incomes</strong>
+      </div>
+    </ng-template>
+  </div>
+</div>
+</div>
+
+<form [formGroup]="iform" (ngSubmit)="onSubmit()">
+<div class="modal fade" id="incomeModal" tabindex="-1" role="dialog" aria-hidden="false" #modal>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div *ngIf="isE" class="alert alert-warning" role="alert">{{aMessage}}</div>
+        <div *ngIf="isS" class="alert alert-success" role="alert">{{aMessage}}</div>
+
+            <div class="modal-body">
+              <div class="row">
+                  <div class="form-group col-md-6 mb-3">
+                      <label>Currency</label>
+                      <select
+                        formControlName="currency"
+                        class="custom-select d-block w-100"
+                        [ngClass]="{'invalid': iform.get('currency').invalid && iform.get('currency').touched}"
+                      >
+                          <option value="0">RUB</option>
+                          <option value="1">USD</option>
+                          <option value="2">EUR</option>
+                      </select>
+                      <div
+                              class="invalid-feedback"
+                              *ngIf="iform.get('currency').invalid && iform.get('currency').touched"
+                      >
+                          <span *ngIf="iform.get('currency').errors['required']">Currency is not empty!!!</span>
+                      </div>
+                  </div>
+                  <div class="form-group col-md-6 mb-3">
+                      <label>Cache</label>
+                      <select
+                          formControlName="cach"
+                          class="custom-select d-block w-100"
+                          [ngClass]="{'invalid': iform.get('cach').invalid && iform.get('cach').touched}"
+                      >
+                          <option value="0">cash</option>
+                          <option value="1">card</option>
+                      </select>
+                      <div
+                              class="invalid-feedback"
+                              *ngIf="iform.get('cach').invalid && iform.get('cach').touched"
+                      >
+                          <span *ngIf="iform.get('cach').errors['required']">Cach is not empty!!!</span>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="form-group col-md-6 mb-3">
+                      <label>Value</label>
+                      <input
+                        formControlName="ivalue"
+                        [ngClass]="{'invalid': iform.get('ivalue').invalid && iform.get('ivalue').touched}"
+                        type="number"
+                        class="form-control"
+                      >
+                      <div
+                              class="invalid-feedback"
+                              *ngIf="iform.get('ivalue').invalid && iform.get('ivalue').touched"
+                      >
+                          <span *ngIf="iform.get('ivalue').errors['required']">Value is not empty!!!</span>
+                      </div>
+                  </div>
+                  <div class="form-group col-md-6 mb-3">
+                      <label>Date</label>
+                      <input
+                        formControlName="idate"
+                        [ngClass]="{'invalid': iform.get('idate').invalid && iform.get('idate').touched}"
+                        type="date"
+                        class="form-control"
+                      >
+                      <div
+                              class="invalid-feedback"
+                              *ngIf="iform.get('idate').invalid && iform.get('idate').touched"
+                      >
+                          <span *ngIf="iform.get('idate').errors['required']">Value is not empty!!!</span>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="mb-3">
+                  <label>Comments</label>
+                  <textarea class="form-control" formControlName="comments" rows="3"></textarea>
+              </div>
+              <hr class="mb-4">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" [disabled]="iform.disabled" #bcm>Close</button>
+        <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="iform.invalid || iform.disabled"
+        >
+            Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+
+<ng-template #loader>
+    <div class="se-pre-con"></div>
+</ng-template>

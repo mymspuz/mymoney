@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col">
+    <section class="tables-section">
+      <!-- table2 -->
+      <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4">Table Incomes</h4>
+        <table class="table">
+          <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Organization</th>
+            <th scope="col">Value</th>
+            <th scope="col">Cach</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let income of incomes; let i = index">
+              <th scope="row">{{i + 1}}</th>
+              <td>{{income.date | date: 'dd.MM.yyyy'}}</td>
+              <td>{{income.oname}}</td>
+              <td>{{income.value}}</td>
+              <td>{{income.cach}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--// table2 -->
+    </section>
+  </div>
+</div>

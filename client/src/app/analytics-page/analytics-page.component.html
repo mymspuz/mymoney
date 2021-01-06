@@ -1,0 +1,94 @@
+<!--<div-->
+  <!--class="container-fluid"-->
+  <!--*ngIf="isLoading; else loader"-->
+<!--&gt;-->
+  <div class="container-fluid">
+    <!-- Stack-chart -->
+    <div class="outer-w3-agile mt-3 mb-3">
+      <app-pie-all [pieAlls]="pieAlls"></app-pie-all>
+    </div>
+    <!--// Stack-chart -->
+
+    <div class="row">
+      <!-- Pie-chart -->
+      <div class="outer-w3-agile col-xl">
+        <app-stack-typecash [stackTypeCash]="stackedTypeCash"></app-stack-typecash>
+      </div>
+      <!--// Pie-chart -->
+
+      <!-- Bar-chart year -->
+      <div class="outer-w3-agile col-xl ml-xl-3 mt-xl-0 mt-3">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <select class="browser-default custom-select" [formControl]="selectOrganization">
+              <option selected value="-1">Select organization</option>
+              <option *ngFor="let organization of (organizations$ | async)" value="{{organization.id}}">
+                {{organization.name}}
+              </option>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <select class="browser-default custom-select" [formControl]="selectCurrency">
+              <option selected value="-1">Select currency</option>
+              <option value="0">RUB</option>
+              <option value="1">USD</option>
+              <option value="2">EUR</option>
+            </select>
+          </div>
+        </div>
+        <app-bar-year [barYears]="barYears"></app-bar-year>
+      </div>
+      <!--// Bar-chart year -->
+    </div>
+  </div>
+
+  <!-- Bar-chart month -->
+  <div class="outer-w3-agile mt-3">
+    <div class="form-row">
+      <div class="form-group col-md-3">
+        <select class="browser-default custom-select" [formControl]="selectOrganizationMonth">
+          <option selected value="-1">Select organization</option>
+          <option *ngFor="let organization of (organizations$ | async)" value="{{organization.id}}">
+            {{organization.name}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group col-md-3">
+        <select class="browser-default custom-select" [formControl]="selectCurrencyMonth">
+          <option selected value="-1">Select currency</option>
+          <option value="0">RUB</option>
+          <option value="1">USD</option>
+          <option value="2">EUR</option>
+        </select>
+      </div>
+      <div class="form-group col-md-3">
+        <select class="browser-default custom-select" [formControl]="selectMinValue">
+          <option value="5000">5000</option>
+          <option value="10000">10000</option>
+          <option value="20000">20000</option>
+          <option value="30000">30000</option>
+          <option value="40000">40000</option>
+          <option value="50000">50000</option>
+          <option value="60000">60000</option>
+          <option value="70000">70000</option>
+          <option value="80000">80000</option>
+          <option value="90000">90000</option>
+          <option value="100000">100000</option>
+        </select>
+      </div>
+    </div>
+    <app-bar-month [barMonths]="barMonths"></app-bar-month>
+  </div>
+  <!--// Bar-chart month -->
+
+  <!-- Line-chart -->
+  <div class="outer-w3-agile mt-3 mb-3">
+    <app-line-curr [lineCurrs]="lineCurrs"></app-line-curr>
+  </div>
+  <!--// Line-chart -->
+
+<!--</div>-->
+
+<!--<ng-template #loader>-->
+  <!--<div class="se-pre-con"></div>-->
+<!--</ng-template>-->

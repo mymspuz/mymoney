@@ -1,0 +1,147 @@
+<div class="main-page signup-page">
+  <h2 class="title1">SignUp Here</h2>
+  <div class="sign-up-row widget-shadow">
+    <h5>Personal Information :</h5>
+    <form
+        [formGroup]="myform"
+        (ngSubmit)="onSubmit()"
+    >
+      <div *ngIf="isE" class="alert alert-warning" role="alert">{{aMessage}}</div>
+      <div *ngIf="isS" class="alert alert-success" role="alert">{{aMessage}}</div>
+      <div class="sign-u form-group has-feedback has-error">
+        <span
+                class="help-block with-errors"
+                *ngIf="myform.get('fname').invalid && myform.get('fname').touched"
+        >
+                <span *ngIf="myform.get('fname').errors['required']">First Name is not empty!!!</span>
+        </span>
+        <input
+            type="text"
+            formControlName="fname"
+            placeholder="First Name"
+            [ngClass]="{'invalid': myform.get('fname').invalid && myform.get('fname').touched}"
+        >
+        <div class="clearfix"> </div>
+      </div>
+      <div class="sign-u form-group has-feedback has-error">
+        <span
+                class="help-block with-errors"
+                *ngIf="myform.get('lname').invalid && myform.get('lname').touched"
+        >
+                <span *ngIf="myform.get('lname').errors['required']">Last Name is not empty!!!</span>
+        </span>
+        <input
+            type="text"
+            placeholder="Last Name"
+            formControlName="lname"
+            [ngClass]="{'invalid': myform.get('lname').invalid && myform.get('lname').touched}"
+        >
+        <div class="clearfix"> </div>
+      </div>
+      <div class="sign-u form-group has-feedback has-error">
+        <span
+                class="help-block with-errors"
+                *ngIf="myform.get('email').invalid && myform.get('email').touched"
+        >
+                <span *ngIf="myform.get('email').errors['required']">Email is not empty!!!</span>
+                <span *ngIf="myform.get('email').errors['email']">Incorrect email!!!</span>
+        </span>
+        <input
+                type="email"
+                class="user"
+                formControlName="email"
+                placeholder="Enter Your Email"
+                [ngClass]="{'invalid': myform.get('email').invalid && myform.get('email').touched}"
+        >
+        <span
+                class="help-block with-errors"
+                *ngIf="myform.get('logname').invalid && myform.get('logname').touched"
+        >
+                <span *ngIf="myform.get('logname').errors['required']">Login is not empty!!!</span>
+        </span>
+        <input
+                type="email"
+                class="user"
+                formControlName="logname"
+                placeholder="Enter Your Login"
+                [ngClass]="{'invalid': myform.get('logname').invalid && myform.get('logname').touched}"
+        >
+        <div class="clearfix"> </div>
+      </div>
+      <div class="sign-u">
+        <div class="sign-up1">
+          <h4>Gender* :</h4>
+        </div>
+        <div class="sign-up2">
+          <label>
+            <input type="radio" formControlName="gender" value="0" required="">
+            Male
+          </label>
+          <label>
+            <input type="radio" formControlName="gender" value="1" required="">
+            Female
+          </label>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+      <h6>Login Information :</h6>
+      <div class="sign-u form-group has-feedback has-error">
+        <span
+                class="help-block with-errors"
+                *ngIf="myform.get('password').invalid && myform.get('password').touched"
+        >
+                <span *ngIf="myform.get('password').errors['required']">Password is not empty!!!</span>
+                <span *ngIf="myform.get('password').errors['minlength'] && myform.get('password').errors['minlength']['requiredLength']">
+                    Length password min. {{myform.get('password').errors['minlength']['requiredLength']}} symbols. Now {{myform.get('password').errors['minlength']['actualLength']}}!!!
+                </span>
+        </span>
+        <input
+                type="password"
+                formControlName="password"
+                class="lock"
+                placeholder="Password"
+                [ngClass]="{'invalid': myform.get('password').invalid && myform.get('password').touched}"
+        >
+
+        <div class="clearfix"> </div>
+      </div>
+      <div class="sign-u">
+        <span
+                class="help-block with-errors"
+                *ngIf="myform.get('cpassword').invalid && myform.get('cpassword').touched"
+        >
+                <span *ngIf="myform.get('cpassword').errors['required']">Password is not empty!!!</span>
+                <span *ngIf="myform.get('cpassword').errors['minlength'] && myform.get('cpassword').errors['minlength']['requiredLength']">
+                    Length password min. {{myform.get('cpassword').errors['minlength']['requiredLength']}} symbols. Now {{myform.get('cpassword').errors['minlength']['actualLength']}}!!!
+                </span>
+                <span *ngIf="myform.get('cpassword') !== myform.get('password')">Password not confirm!!!</span>
+
+        </span>
+        <input
+                type="password"
+                formControlName="cpassword"
+                class="lock"
+                placeholder="Confirm password"
+                [ngClass]="{'invalid': myform.get('cpassword').invalid && myform.get('cpassword').touched && myform.get('password') !== myform.get('cpassword')}"
+        >
+
+      </div>
+      <div class="clearfix"> </div>
+      <div class="validation-grids">
+        <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="myform.invalid || myform.disabled"
+        >
+          Sign Up
+        </button>
+      </div>
+      <div class="registration">
+        Already Registered.
+        <a routerLink="/login">
+          Login
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

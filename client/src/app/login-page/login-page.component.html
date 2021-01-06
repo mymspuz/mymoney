@@ -1,0 +1,74 @@
+<div class="bg-page py-5">
+    <div class="container">
+        <!-- main-heading -->
+        <h2 class="main-title-w3layouts mb-2 text-center text-white">Login</h2>
+        <!--// main-heading -->
+        <div class="form-body-w3-agile text-center w-lg-50 w-sm-75 w-100 mx-auto mt-5">
+            <form
+
+                    [formGroup]="myform"
+                    (ngSubmit)="onSubmit()"
+            >
+                <div *ngIf="isE" class="alert alert-warning" role="alert">{{aMessage}}</div>
+                <div *ngIf="isS" class="alert alert-success" role="alert">{{aMessage}}</div>
+
+                <div class="form-group">
+                    <label>Email address</label>
+                    <input
+                            type="email"
+                            class="form-control"
+                            formControlName="email"
+                            placeholder="Enter Your Email"
+                            [ngClass]="{'invalid': myform.get('email').invalid && myform.get('email').touched}"
+                    >
+                    <div
+                        class="invalid-feedback"
+                        *ngIf="myform.get('email').invalid && myform.get('email').touched"
+                    >
+                        <span *ngIf="myform.get('email').errors['required']">Email is not empty!!!</span>
+                        <span *ngIf="myform.get('email').errors['email']">Incorrect email!!!</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input
+                            type="password"
+                            formControlName="password"
+                            class="form-control"
+                            placeholder="Password"
+                            [ngClass]="{'invalid': myform.get('password').invalid && myform.get('password').touched}"
+                    >
+                    <div
+                            class="invalid-feedback"
+                            *ngIf="myform.get('password').invalid && myform.get('password').touched"
+                    >
+                        <span *ngIf="myform.get('password').errors['required']">Password is not empty!!!</span>
+                        <span *ngIf="myform.get('password').errors['minlength'] && myform.get('password').errors['minlength']['requiredLength']">
+                                Length password min. {{myform.get('password').errors['minlength']['requiredLength']}} symbols. Now {{myform.get('password').errors['minlength']['actualLength']}}!!!
+                        </span>
+                    </div>
+
+                </div>
+                <div class="d-sm-flex justify-content-between">
+                    <div class="form-check col-md-6 text-sm-left text-center">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                    </div>
+                    <div class="forgot col-md-6 text-sm-right text-center">
+                        <a href="#">forgot password?</a>
+                    </div>
+                </div>
+                <button
+                        type="submit"
+                        class="btn btn-primary error-w3l-btn mt-sm-5 mt-3 px-4"
+                        [disabled]="myform.invalid || myform.disabled"
+                >
+                    Sign In
+                </button>
+            </form>
+            <p class="paragraph-agileits-w3layouts mt-4">Don't have an account
+                <a routerLink="/signup">Create an account</a>
+            </p>
+        </div>
+    </div>
+</div>
