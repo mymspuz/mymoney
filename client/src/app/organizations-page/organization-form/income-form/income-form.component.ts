@@ -71,6 +71,10 @@ export class IncomeFormComponent implements OnInit {
         this.isE = false
         this.isS = false
         this.aMessage = ''
+        // Close the modal after a successful save. onComplete runs only from the
+        // observable's `complete` callback (success), not on error, so the modal
+        // stays open with the error message when a save fails.
+        this.buttonCloseModal.nativeElement.click()
     }
 
     onSubmit() {
