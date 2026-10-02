@@ -4,7 +4,8 @@ const sequelize = require('../shared/mysqlconnect')
 const User = sequelize.define('users', {
     id: {
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     fname: {
         type: Sequelize.STRING,

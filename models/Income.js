@@ -7,7 +7,8 @@ const User = require('../models/User')
 const Income = sequelize.define('income', {
     id: {
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     organization_id: {
         type: Sequelize.INTEGER,
