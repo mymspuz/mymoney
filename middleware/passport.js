@@ -5,7 +5,10 @@ const keys = require('../config/keys')
 
 const options = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: keys.jwt
+    secretOrKey: keys.jwt,
+    // Pin the HMAC algorithm explicitly (jsonwebtoken 9 best practice) so only
+    // HS256 tokens are accepted.
+    algorithms: ['HS256']
 }
 
 module.exports = passport => {
