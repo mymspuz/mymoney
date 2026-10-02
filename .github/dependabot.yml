@@ -1,0 +1,50 @@
+version: 2
+
+# Tuned to how this repo is actually deployed:
+#  - "/"        the Express backend, run in production with `npm install --omit=dev`.
+#               Only its production dependencies reach prod, so we track those and
+#               leave the (unused) Angular/test devDependencies in the root manifest
+#               alone.
+#  - "/client"  the Angular 11 frontend. Only a prebuilt bundle ships; the build
+#               toolchain is frozen and will be upgraded wholesale in a future
+#               Angular migration, so we keep the noise low and skip major bumps.
+updates:
+  # ---- Backend (Express / Node, runs in production) ----
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    # Only production deps run in prod; ignore the leftover Angular/test devDeps here.
+    allow:
+      - dependency-type: "production"
+    # One PR for routine minor/patch bumps; majors still come individually so
+    # breaking upgrades (e.g. the next Express/Sequelize major) are surfaced for review.
+    groups:
+      backend-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # ---- Angular 11 client (prebuilt bundle; toolchain frozen) ----
+  - package-ecosystem: "npm"
+    directory: "/client"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    # Collapse the many build/test deps into a single PR.
+    groups:
+      client-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    # No major bumps: the whole Angular 11 toolchain moves together in a dedicated
+    # upgrade, not piecemeal.
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
