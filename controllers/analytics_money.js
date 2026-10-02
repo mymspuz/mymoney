@@ -4,17 +4,18 @@ const sequelize = require('../shared/mysqlconnect')
 
 module.exports.getAllYear = function (req, res) {
     try {
-        let mySQL = 'SELECT YEAR(i.date) AS year,\n' +
-                    '\t   SUM(i.`value`) AS rub,\n' +
-                    '\t   SUM(i.`value` / (SELECT u.`value` FROM `currency_date` AS u WHERE u.`date` = i.`date` AND u.`currency_sec` = 1)) AS usd,\n' +
-                    '       SUM(i.`value` / (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = i.`date` AND e.`currency_sec` = 2)) AS eur\n' +
-                    'FROM `incomes` AS i\n'
+        let sql = 'SELECT EXTRACT(YEAR FROM i.date)::int AS year,\n' +
+                  '       SUM(i.value) AS rub,\n' +
+                  '       SUM(i.value / (SELECT u.value FROM currency_date AS u WHERE u.date = i.date AND u.currency_sec = 1)) AS usd,\n' +
+                  '       SUM(i.value / (SELECT e.value FROM currency_date AS e WHERE e.date = i.date AND e.currency_sec = 2)) AS eur\n' +
+                  'FROM incomes AS i\n'
 
         if (req.query.oid && req.query.oid != '-1') {
-          mySQL = mySQL + ' WHERE i.organization_id = :organization_id '
+          sql = sql + ' WHERE i.organization_id = :organization_id '
         }
-        mySQL = mySQL + 'GROUP BY date_format(i.`date`, "%Y")'
-        sequelize.query(mySQL,
+        sql = sql + 'GROUP BY EXTRACT(YEAR FROM i.date)\n' +
+                    'ORDER BY year'
+        sequelize.query(sql,
                 {
                     replacements: {
                       organization_id: +req.query.oid,
@@ -38,17 +39,17 @@ module.exports.getAllYear = function (req, res) {
 
 module.exports.getAllMonth = function (req, res) {
     try {
-        let mySQL = 'SELECT CONCAT(LEFT(MONTHNAME(i.`date`), 3), ", ", year(i.`date`)) AS month_year,\n' +
-                    '\t SUM(i.`value`) AS rub,\n' +
-                    '\t SUM(i.`value` / (SELECT u.`value` FROM `currency_date` AS u WHERE u.`date` = i.`date` AND u.`currency_sec` = 1)) AS usd,\n' +
-                    '\t SUM(i.`value` / (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = i.`date` AND e.`currency_sec` = 2)) AS eur\n' +
-                    'FROM `incomes` AS i\n'
+        let sql = "SELECT to_char(i.date, 'Mon, YYYY') AS month_year,\n" +
+                  '       SUM(i.value) AS rub,\n' +
+                  '       SUM(i.value / (SELECT u.value FROM currency_date AS u WHERE u.date = i.date AND u.currency_sec = 1)) AS usd,\n' +
+                  '       SUM(i.value / (SELECT e.value FROM currency_date AS e WHERE e.date = i.date AND e.currency_sec = 2)) AS eur\n' +
+                  'FROM incomes AS i\n'
         if (req.query.oid && req.query.oid != '-1') {
-          mySQL = mySQL + ' WHERE i.organization_id = :organization_id '
+          sql = sql + ' WHERE i.organization_id = :organization_id '
         }
-        mySQL = mySQL + 'GROUP BY date_format(i.`date`, "%Y-%m")\n' +
-                        'ORDER BY i.`date` ASC'
-        sequelize.query(mySQL,
+        sql = sql + "GROUP BY to_char(i.date, 'Mon, YYYY'), to_char(i.date, 'YYYY-MM')\n" +
+                    "ORDER BY to_char(i.date, 'YYYY-MM') ASC"
+        sequelize.query(sql,
                 {
                     replacements: {
                       organization_id: +req.query.oid,
@@ -73,11 +74,11 @@ module.exports.getAllMonth = function (req, res) {
 module.exports.getAllCurr = function (req, res) {
     try {
         sequelize.query('SELECT DISTINCT\n' +
-                            '\t c.`date`,\n' +
-                            '\t (SELECT u.`value` FROM `currency_date` AS u WHERE u.`date` = c.`date` AND u.`currency_sec` = 1) AS usd,\n' +
-                            '\t (SELECT e.`value` FROM `currency_date` AS e WHERE e.`date` = c.`date` AND e.`currency_sec` = 2) AS eur\n' +
-                            'FROM `currency_date` AS c\n' +
-                            'ORDER BY c.`date`',
+                            '\t c.date,\n' +
+                            '\t (SELECT u.value FROM currency_date AS u WHERE u.date = c.date AND u.currency_sec = 1) AS usd,\n' +
+                            '\t (SELECT e.value FROM currency_date AS e WHERE e.date = c.date AND e.currency_sec = 2) AS eur\n' +
+                            'FROM currency_date AS c\n' +
+                            'ORDER BY c.date',
             {
                 raw: true,
                 type: Sequelize.QueryTypes.SELECT
@@ -99,11 +100,11 @@ module.exports.getAllCurr = function (req, res) {
 module.exports.getTypeCash = function (req, res) {
   try {
     sequelize.query('SELECT\n' +
-                    '\t YEAR(i.`date`) AS year,\n' +
-                    '\t SUM(IF(i.`cach` = 0, i.`value`, 0)) AS cash,\n' +
-                    '\t SUM(IF(i.`cach` = 1, i.`value`, 0)) AS card\n' +
-                    'FROM `incomes` AS i\n' +
-                    'GROUP BY date_format(i.`date`, "%Y")\n' +
+                    '\t EXTRACT(YEAR FROM i.date)::int AS year,\n' +
+                    '\t SUM(CASE WHEN i.cach = 0 THEN i.value ELSE 0 END) AS cash,\n' +
+                    '\t SUM(CASE WHEN i.cach = 1 THEN i.value ELSE 0 END) AS card\n' +
+                    'FROM incomes AS i\n' +
+                    'GROUP BY EXTRACT(YEAR FROM i.date)\n' +
                     'ORDER BY year',
         {
           raw: true,
