@@ -40,6 +40,8 @@ export class OverviewPageComponent implements OnInit {
 
     this.organizationLastMonthSumm$ = this.organizationService.getLastNumberMonth()
     this.getMyArray()
+    // Rates are populated server-side (CBR daily job) into currency_date; the
+    // page just reads today's rate here.
     this.overviewService.getByDate(this.coursCurrency.date).subscribe(
         item => {
             for(let i = 0; i < item.length; i++) {
@@ -52,38 +54,8 @@ export class OverviewPageComponent implements OnInit {
         },
         error => {
             console.log(error.error.message)
-        },
-        () => {
-            this.getOnlineCurrency()
         }
     )
-  }
-
-  private getOnlineCurrency() {
-      if (this.coursCurrency.usd === 0) {
-          this.overviewService.getCurrency().subscribe(
-              currency => {
-                  this.coursCurrency.usd = currency.quotes.USDRUB
-                  this.coursCurrency.eur = currency.quotes.USDRUB / currency.quotes.USDEUR
-              },
-              error => {
-                  console.log(error.error.message)
-              },
-              () => {
-                  this.add()
-              }
-          )
-      }
-  }
-
-  private add() {
-      this.overviewService.addCurrency(this.coursCurrency).subscribe(
-          item => {
-          },
-          error => {
-              console.log(error.error.message)
-          }
-      )
   }
 
   private getTotalOrganizationSumm() {
