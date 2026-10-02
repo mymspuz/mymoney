@@ -18,6 +18,10 @@ const Currency = sequelize.define('currency', {
             key: 'id',
         }
     }
+}, {
+    // Real table is singular "currency"; without this Sequelize would
+    // pluralize the model name and query a non-existent "currencies" table.
+    tableName: 'currency'
 })
 
 module.exports = Currency

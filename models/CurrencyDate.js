@@ -18,6 +18,10 @@ const CurrencyDate = sequelize.define('currency_date', {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false
     }
+}, {
+    // Real table is "currency_date" (all access is via raw SQL today, but keep
+    // the model mapped correctly so ORM calls would not hit "currency_dates").
+    tableName: 'currency_date'
 })
 
 module.exports = CurrencyDate
