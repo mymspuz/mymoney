@@ -1,0 +1,21 @@
+[Unit]
+Description=mymoney - fetch daily USD/EUR rates from CBR into currency_date
+After=network-online.target postgresql.service mymoney.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=mymoney
+Group=mymoney
+WorkingDirectory=/opt/mymoney
+EnvironmentFile=/opt/mymoney/.env
+ExecStart=/usr/bin/node /opt/mymoney/scripts/update_currency.js
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mymoney-currency
+Environment=HOME=/opt/mymoney
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/mymoney

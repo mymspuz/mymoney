@@ -1,0 +1,12 @@
+[Unit]
+Description=mymoney - run the daily CBR currency-rate updater
+
+[Timer]
+# Every day at 12:00 (CBR publishes the day's rates in the morning).
+OnCalendar=*-*-* 12:00:00
+# If the machine was off at the scheduled time, run on next boot.
+Persistent=true
+Unit=mymoney-currency.service
+
+[Install]
+WantedBy=timers.target
