@@ -32,8 +32,8 @@ const Income = sequelize.define('income', {
         allowNull: false
     },
     cach: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+        type: Sequelize.SMALLINT,
+        defaultValue: 0
     },
     comments: {
         type: Sequelize.STRING,

@@ -13,15 +13,15 @@ module.exports.getAll = async function (req, res) {
         mySQL = mySQL + `AND o.id = ${req.query.organization_id} `
     }
     if (req.query.sdate && req.query.sdate !== '') {
-        mySQL = mySQL + `AND i.date >= "${req.query.sdate}" `
+        mySQL = mySQL + `AND i.date >= '${req.query.sdate}' `
     }
     if (req.query.edate && req.query.edate !== '') {
-        mySQL = mySQL + `AND i.date <= "${req.query.edate}" `
+        mySQL = mySQL + `AND i.date <= '${req.query.edate}' `
     }
     try {
         sequelize.query( mySQL +
                             'ORDER BY i.date DESC ' +
-                            'LIMIT :offset, :limit',
+                            'LIMIT :limit OFFSET :offset',
     {
                 replacements: {
                                 user: req.user.id,

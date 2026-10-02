@@ -25,7 +25,7 @@ const User = sequelize.define('users', {
         unique: true
     },
     gender: {
-        type: Sequelize.TINYINT(1),
+        type: Sequelize.SMALLINT,
         allowNull: false
     },
     password: {
