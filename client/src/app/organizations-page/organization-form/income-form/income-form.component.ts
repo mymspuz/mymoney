@@ -74,7 +74,9 @@ export class IncomeFormComponent implements OnInit {
         // Close the modal after a successful save. onComplete runs only from the
         // observable's `complete` callback (success), not on error, so the modal
         // stays open with the error message when a save fails.
-        this.buttonCloseModal.nativeElement.click()
+        // #bcm is the header close button (never disabled); defer the click with
+        // setTimeout so Angular's change detection has re-enabled controls first.
+        setTimeout(() => this.buttonCloseModal.nativeElement.click())
     }
 
     onSubmit() {
