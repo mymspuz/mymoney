@@ -5,7 +5,8 @@ const User = require('../models/User')
 const Organization = sequelize.define('organization', {
     id: {
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     name: {
         type: Sequelize.STRING,
